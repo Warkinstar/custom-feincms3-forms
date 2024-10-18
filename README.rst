@@ -1,3 +1,7 @@
+This project is a fork of the original project developed by Feinheit AG and contributors.
+
+License: This project is licensed under the terms of the same license as the original project. Please see the LICENSE file for details.
+
 ==============
 feincms3-forms
 ==============
