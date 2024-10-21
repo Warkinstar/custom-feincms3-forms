@@ -316,7 +316,8 @@ class SimpleFieldBase(FormField):
         if (
             self.choices
             and self.default_value
-            and slugify(self.default_value) not in dict(self.get_choices())
+            # and slugify(self.default_value) not in dict(self.get_choices())  # Original
+            and self.default_value not in dict(self.get_choices())
         ):
             raise validation_error(
                 _(
@@ -331,7 +332,8 @@ class SimpleFieldBase(FormField):
         def _choice(value):
             parts = [part.strip() for part in value.split("|", 1)]
             if len(parts) == 1:
-                return (slugify(value), value)
+                # return (slugify(value), value)  # Original
+                return (value, value)
             else:
                 return tuple(parts)
 
@@ -341,7 +343,8 @@ class SimpleFieldBase(FormField):
         if not self.default_value:
             return {}
         if self.choices:
-            return {self.name: slugify(self.default_value)}
+            # return {self.name: slugify(self.default_value)}  # Original
+            return {self.name: self.default_value}
         return {self.name: self.default_value}
 
     def get_fields(self, **kwargs):
