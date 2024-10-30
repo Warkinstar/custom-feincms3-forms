@@ -17,6 +17,7 @@ from django.utils.module_loading import import_string
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from feincms3.utils import ChoicesCharField, validation_error
+from django_select2 import forms as s2forms
 
 
 class FormType(Type):
@@ -417,6 +418,17 @@ class SimpleFieldBase(FormField):
             return self.get_field(
                 form_class=forms.ChoiceField,
                 choices=choices,
+                # 30/10/2024 - инициализация select2 widget библиотеки django_select2
+                widget=s2forms.Select2Widget(
+                    attrs={
+                        "data-minimum-input-length": 0,  # Количество символов, чтобы начать поиск
+                        "data-maximum-input-length": 1000,  # Максимальное кол-во символов в input
+                        "data-placeholder": "Нажмите для выбора",  # Надпись
+                        "data-close-on-select": "true",  # Закрывать селектор после выбора
+                        "data-allow-clear": "true",  # Иконка закрыть
+                        "data-language": "ru",
+                    }
+                ),
             )
 
         elif self.type == type.RADIO:
