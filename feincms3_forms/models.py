@@ -217,6 +217,11 @@ class FormField(FormFieldBase):
         max_length=1000,
         blank=True,
     )
+    is_required_to_move = models.BooleanField(
+        "Обязательно для перехода",
+        default=False,
+        help_text="Указывает, обязательно ли заполнение этого поля для перехода на следующий этап."
+    )  # Custom Field
 
     class Meta:
         abstract = True

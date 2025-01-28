@@ -70,7 +70,7 @@ class ConfiguredFormAdmin(ContentEditor):
 
 
 class FormFieldInline(ContentEditorInline):
-    core_fields = ["name", "label", "is_required"]
+    core_fields = ["name", "label", "is_required", "is_required_to_move"]
     advanced_fields = ["help_text"]
 
     def get_fieldsets(self, request, obj=None):
@@ -112,7 +112,7 @@ class SimpleFieldInline(FormFieldInline):
 
         elif model.TYPE in {type.SELECT}:
             kwargs.setdefault(
-                "core_fields", ["name", "label", "is_required", "choices"]
+                "core_fields", ["name", "label", "is_required", "choices", "is_required_to_move"]
             )
             kwargs.setdefault(
                 "advanced_fields", ["help_text", "placeholder", "default_value"]
@@ -124,7 +124,7 @@ class SimpleFieldInline(FormFieldInline):
             type.CHECKBOX_SELECT_MULTIPLE,
         }:
             kwargs.setdefault(
-                "core_fields", ["name", "label", "is_required", "choices"]
+                "core_fields", ["name", "label", "is_required", "choices", "is_required_to_move"]
             )
             kwargs.setdefault("advanced_fields", ["help_text", "default_value"])
 
