@@ -73,11 +73,16 @@ class FormFieldInline(ContentEditorInline):
     core_fields = ["name", "label", "is_required"]
     advanced_fields = [
         "help_text",
-        "is_required_to_move",
+        "is_unique",
         "is_visible",
         "is_editable",
+        "is_required_to_move",
         "use_script",
         "execute_on_first_save",
+        "execute_on_every_save",
+        "execute_periodically",
+        "crontab",
+        "python_script",
     ]
 
     def get_fieldsets(self, request, obj=None):
@@ -111,16 +116,16 @@ class SimpleFieldInline(FormFieldInline):
                     "placeholder",
                     "default_value",
                     "max_length",
-                    "is_required_to_move",
                     "is_unique",
                     "is_visible",
                     "is_editable",
+                    "is_required_to_move",
                     "use_script",
                     "execute_on_first_save",
                     "execute_on_every_save",
                     "execute_periodically",
                     "crontab",
-                    "python_script"
+                    "python_script",
                 ],
             )
 
@@ -131,16 +136,16 @@ class SimpleFieldInline(FormFieldInline):
                     "help_text",
                     "placeholder",
                     "default_value",
-                    "is_required_to_move",
                     "is_unique",
                     "is_visible",
                     "is_editable",
+                    "is_required_to_move",
                     "use_script",
                     "execute_on_first_save",
                     "execute_on_every_save",
                     "execute_periodically",
                     "crontab",
-                    "python_script"
+                    "python_script",
                 ],
             )
 
@@ -150,16 +155,16 @@ class SimpleFieldInline(FormFieldInline):
                 [
                     "help_text",
                     "default_value",
-                    "is_required_to_move",
                     "is_unique",
                     "is_visible",
                     "is_editable",
+                    "is_required_to_move",
                     "use_script",
                     "execute_on_first_save",
                     "execute_on_every_save",
                     "execute_periodically",
                     "crontab",
-                    "python_script"
+                    "python_script",
                 ],
             )
 
@@ -173,16 +178,16 @@ class SimpleFieldInline(FormFieldInline):
                     "help_text",
                     "placeholder",
                     "default_value",
-                    "is_required_to_move",
                     "is_unique",
                     "is_visible",
                     "is_editable",
+                    "is_required_to_move",
                     "use_script",
                     "execute_on_first_save",
                     "execute_on_every_save",
                     "execute_periodically",
                     "crontab",
-                    "python_script"
+                    "python_script",
                 ],
             )
 
@@ -199,16 +204,16 @@ class SimpleFieldInline(FormFieldInline):
                 [
                     "help_text",
                     "default_value",
-                    "is_required_to_move",
                     "is_unique",
                     "is_visible",
                     "is_editable",
+                    "is_required_to_move",
                     "use_script",
                     "execute_on_first_save",
                     "execute_on_every_save",
                     "execute_periodically",
                     "crontab",
-                    "python_script"
+                    "python_script",
                 ],
             )
 
