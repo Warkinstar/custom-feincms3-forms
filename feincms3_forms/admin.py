@@ -71,7 +71,14 @@ class ConfiguredFormAdmin(ContentEditor):
 
 class FormFieldInline(ContentEditorInline):
     core_fields = ["name", "label", "is_required"]
-    advanced_fields = ["help_text", "is_required_to_move"]
+    advanced_fields = [
+        "help_text",
+        "is_required_to_move",
+        "is_visible",
+        "is_editable",
+        "use_script",
+        "execute_on_first_save",
+    ]
 
     def get_fieldsets(self, request, obj=None):
         return [
@@ -99,23 +106,84 @@ class SimpleFieldInline(FormFieldInline):
         if model.TYPE in {type.TEXT, type.TEXTAREA, type.EMAIL, type.URL}:
             kwargs.setdefault(
                 "advanced_fields",
-                ["help_text", "placeholder", "default_value", "max_length", "is_required_to_move"],
+                [
+                    "help_text",
+                    "placeholder",
+                    "default_value",
+                    "max_length",
+                    "is_required_to_move",
+                    "is_unique",
+                    "is_visible",
+                    "is_editable",
+                    "use_script",
+                    "execute_on_first_save",
+                    "execute_on_every_save",
+                    "execute_periodically",
+                    "crontab",
+                    "python_script"
+                ],
             )
 
         elif model.TYPE in {type.DATE, type.INTEGER}:
             kwargs.setdefault(
-                "advanced_fields", ["help_text", "placeholder", "default_value", "is_required_to_move"]
+                "advanced_fields",
+                [
+                    "help_text",
+                    "placeholder",
+                    "default_value",
+                    "is_required_to_move",
+                    "is_unique",
+                    "is_visible",
+                    "is_editable",
+                    "use_script",
+                    "execute_on_first_save",
+                    "execute_on_every_save",
+                    "execute_periodically",
+                    "crontab",
+                    "python_script"
+                ],
             )
 
         elif model.TYPE in {type.CHECKBOX}:
-            kwargs.setdefault("advanced_fields", ["help_text", "default_value", "is_required_to_move"])
+            kwargs.setdefault(
+                "advanced_fields",
+                [
+                    "help_text",
+                    "default_value",
+                    "is_required_to_move",
+                    "is_unique",
+                    "is_visible",
+                    "is_editable",
+                    "use_script",
+                    "execute_on_first_save",
+                    "execute_on_every_save",
+                    "execute_periodically",
+                    "crontab",
+                    "python_script"
+                ],
+            )
 
         elif model.TYPE in {type.SELECT}:
             kwargs.setdefault(
                 "core_fields", ["name", "label", "is_required", "choices"]
             )
             kwargs.setdefault(
-                "advanced_fields", ["help_text", "placeholder", "default_value", "is_required_to_move"]
+                "advanced_fields",
+                [
+                    "help_text",
+                    "placeholder",
+                    "default_value",
+                    "is_required_to_move",
+                    "is_unique",
+                    "is_visible",
+                    "is_editable",
+                    "use_script",
+                    "execute_on_first_save",
+                    "execute_on_every_save",
+                    "execute_periodically",
+                    "crontab",
+                    "python_script"
+                ],
             )
 
         elif model.TYPE in {
@@ -126,7 +194,23 @@ class SimpleFieldInline(FormFieldInline):
             kwargs.setdefault(
                 "core_fields", ["name", "label", "is_required", "choices"]
             )
-            kwargs.setdefault("advanced_fields", ["help_text", "default_value", "is_required_to_move"])
+            kwargs.setdefault(
+                "advanced_fields",
+                [
+                    "help_text",
+                    "default_value",
+                    "is_required_to_move",
+                    "is_unique",
+                    "is_visible",
+                    "is_editable",
+                    "use_script",
+                    "execute_on_first_save",
+                    "execute_on_every_save",
+                    "execute_periodically",
+                    "crontab",
+                    "python_script"
+                ],
+            )
 
         icons = {
             type.TEXT: "short_text",
