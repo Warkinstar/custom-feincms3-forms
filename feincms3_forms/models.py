@@ -18,6 +18,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from feincms3.utils import ChoicesCharField, validation_error
 from django_select2 import forms as s2forms
+from django_celery_beat.models import CrontabSchedule
 
 
 class FormType(Type):
@@ -217,11 +218,57 @@ class FormField(FormFieldBase):
         max_length=1000,
         blank=True,
     )
+
+    # CUSTOM FIELDS
+
+    is_unique = models.BooleanField(
+        default=False, verbose_name=_("Поле должно быть уникальным")
+    )
+
+    is_visible = models.BooleanField(
+        _("Отображать поле в форме"), default=True
+    )  # custom Field, если is_visible == False,
+
+    is_editable = models.BooleanField(
+        _("Позволять редактировать это поле"), default=True
+    )
+
     is_required_to_move = models.BooleanField(
-        "Обязательно для перехода",
+        _("Обязательно для перехода"),
         default=False,
-        help_text="Указывает, обязательно ли заполнение этого поля для перехода на следующий этап."
+        help_text=_(
+            "Указывает, обязательно ли заполнение этого поля для перехода на следующий этап."
+        ),
     )  # Custom Field
+
+    # Использование скрипта
+    use_script = models.BooleanField(
+        default=False, verbose_name=_("Использовать скрипт")
+    )
+    execute_on_first_save = models.BooleanField(
+        default=False, verbose_name=_("Выполнить скрипт в момент создания записи")
+    )
+    execute_on_every_save = models.BooleanField(
+        default=False, verbose_name=_("Выполнять скрипт при каждом сохранении")
+    )
+    execute_periodically = models.BooleanField(
+        default=False,
+        verbose_name=_("Выполнять периодически"),
+        help_text=_("Выполнять периодически пока поле не будет заполнено."),
+    )
+    crontab = models.ForeignKey(
+        CrontabSchedule,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        verbose_name=_("Периодичность"),
+    )
+    python_script = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name=_("Python-скрипт"),
+        help_text="Доступен атрибут self записи",
+    )
 
     class Meta:
         abstract = True
