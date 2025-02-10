@@ -70,8 +70,8 @@ class ConfiguredFormAdmin(ContentEditor):
 
 
 class FormFieldInline(ContentEditorInline):
-    core_fields = ["name", "label", "is_required", "is_required_to_move"]
-    advanced_fields = ["help_text"]
+    core_fields = ["name", "label", "is_required"]
+    advanced_fields = ["help_text", "is_required_to_move"]
 
     def get_fieldsets(self, request, obj=None):
         return [
@@ -99,23 +99,23 @@ class SimpleFieldInline(FormFieldInline):
         if model.TYPE in {type.TEXT, type.TEXTAREA, type.EMAIL, type.URL}:
             kwargs.setdefault(
                 "advanced_fields",
-                ["help_text", "placeholder", "default_value", "max_length"],
+                ["help_text", "placeholder", "default_value", "max_length", "is_required_to_move"],
             )
 
         elif model.TYPE in {type.DATE, type.INTEGER}:
             kwargs.setdefault(
-                "advanced_fields", ["help_text", "placeholder", "default_value"]
+                "advanced_fields", ["help_text", "placeholder", "default_value", "is_required_to_move"]
             )
 
         elif model.TYPE in {type.CHECKBOX}:
-            kwargs.setdefault("advanced_fields", ["help_text", "default_value"])
+            kwargs.setdefault("advanced_fields", ["help_text", "default_value", "is_required_to_move"])
 
         elif model.TYPE in {type.SELECT}:
             kwargs.setdefault(
-                "core_fields", ["name", "label", "is_required", "choices", "is_required_to_move"]
+                "core_fields", ["name", "label", "is_required", "choices"]
             )
             kwargs.setdefault(
-                "advanced_fields", ["help_text", "placeholder", "default_value"]
+                "advanced_fields", ["help_text", "placeholder", "default_value", "is_required_to_move"]
             )
 
         elif model.TYPE in {
@@ -124,9 +124,9 @@ class SimpleFieldInline(FormFieldInline):
             type.CHECKBOX_SELECT_MULTIPLE,
         }:
             kwargs.setdefault(
-                "core_fields", ["name", "label", "is_required", "choices", "is_required_to_move"]
+                "core_fields", ["name", "label", "is_required", "choices"]
             )
-            kwargs.setdefault("advanced_fields", ["help_text", "default_value"])
+            kwargs.setdefault("advanced_fields", ["help_text", "default_value", "is_required_to_move"])
 
         icons = {
             type.TEXT: "short_text",
