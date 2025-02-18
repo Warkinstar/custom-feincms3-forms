@@ -32,9 +32,9 @@ class FormMixin:
         return data
 
 
-def create_form(plugins, *, form_class=forms.Form, form_kwargs):
+def create_form(plugins, *, form_class=forms.Form, form_kwargs, is_update=False, **kwargs):
     field_plugins = [plugin for plugin in plugins if isinstance(plugin, FormFieldBase)]
-    plugin_fields = {plugin: plugin.get_fields() for plugin in field_plugins}
+    plugin_fields = {plugin: plugin.get_fields(is_update=is_update) for plugin in field_plugins}
     all_fields = reduce(or_, plugin_fields.values(), {})
     all_names = set(all_fields)
 

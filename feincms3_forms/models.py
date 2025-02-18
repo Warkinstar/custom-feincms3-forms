@@ -276,6 +276,22 @@ class FormField(FormFieldBase):
     def __str__(self):
         return truncatechars(self.label, 50)
 
+    def should_show_field(self, is_update=False):
+        """
+        Определяет, должно ли поле отображаться.
+
+        Условия:
+          - Если is_visible == False, поле не показывается.
+          - Если is_visible == True и is_editable == True, поле всегда показывается.
+          - Если is_visible == True и is_editable == False, поле показывается только в режиме создания (is_update == False).
+        """
+        if not self.is_visible:
+            return False
+        elif self.is_editable:
+            return True
+        else:
+            return not is_update
+
     def get_field(self, *, form_class, **kwargs):
         kwargs.setdefault("label", self.label)
         kwargs.setdefault("required", self.is_required)
@@ -401,6 +417,12 @@ class SimpleFieldBase(FormField):
         return {self.name: self.default_value}
 
     def get_fields(self, **kwargs):
+
+        # Custom Flags 18/02/2025
+        is_update = kwargs.pop("is_update", False)
+        # Определяем, показывать ли поле
+        should_show = self.should_show_field(is_update=is_update)
+
         type = self.Type
 
         if self.type == type.TEXT:
@@ -409,7 +431,7 @@ class SimpleFieldBase(FormField):
                 max_length=self.max_length,
                 widget=forms.CharField.widget(
                     attrs={"placeholder": self.placeholder or False}
-                ),
+                ) if should_show else forms.HiddenInput,
             )
 
         elif self.type == type.EMAIL:
@@ -417,7 +439,7 @@ class SimpleFieldBase(FormField):
                 form_class=forms.EmailField,
                 widget=forms.EmailField.widget(
                     attrs={"placeholder": self.placeholder or False}
-                ),
+                ) if should_show else forms.HiddenInput,
             )
 
         elif self.type == type.URL:
@@ -425,7 +447,7 @@ class SimpleFieldBase(FormField):
                 form_class=forms.URLField,
                 widget=forms.URLField.widget(
                     attrs={"placeholder": self.placeholder or False}
-                ),
+                ) if should_show else forms.HiddenInput,
             )
 
         elif self.type == type.DATE:
@@ -433,7 +455,7 @@ class SimpleFieldBase(FormField):
                 form_class=forms.DateField,
                 widget=forms.DateInput(
                     attrs={"placeholder": self.placeholder or False, "type": "date"}
-                ),
+                ) if should_show else forms.HiddenInput,
             )
 
         elif self.type == type.INTEGER:
@@ -441,7 +463,7 @@ class SimpleFieldBase(FormField):
                 form_class=forms.IntegerField,
                 widget=forms.IntegerField.widget(
                     attrs={"placeholder": self.placeholder or False}
-                ),
+                ) if should_show else forms.HiddenInput,
             )
 
         elif self.type == type.TEXTAREA:
@@ -454,11 +476,11 @@ class SimpleFieldBase(FormField):
                         "placeholder": self.placeholder or False,
                         "rows": 5,
                     },
-                ),
+                ) if should_show else forms.HiddenInput,
             )
 
         elif self.type == type.CHECKBOX:
-            return self.get_field(form_class=forms.BooleanField)
+            return self.get_field(form_class=forms.BooleanField, widget=forms.CheckboxInput if should_show else forms.HiddenInput)
 
         elif self.type == type.SELECT:
             choices = self.get_choices()
@@ -480,13 +502,13 @@ class SimpleFieldBase(FormField):
                         "data-allow-clear": "true",  # Иконка закрыть
                         "data-language": "ru",
                     }
-                ),
+                ) if should_show else forms.HiddenInput,
             )
 
         elif self.type == type.RADIO:
             return self.get_field(
                 form_class=forms.ChoiceField,
-                widget=forms.RadioSelect,
+                widget=forms.RadioSelect if should_show else forms.HiddenInput,
                 choices=self.get_choices(),
             )
 
@@ -494,12 +516,13 @@ class SimpleFieldBase(FormField):
             return self.get_field(
                 form_class=forms.MultipleChoiceField,
                 choices=self.get_choices(),
+                widget=forms.SelectMultiple if should_show else forms.MultipleHiddenInput
             )
 
         elif self.type == type.CHECKBOX_SELECT_MULTIPLE:
             return self.get_field(
                 form_class=forms.MultipleChoiceField,
-                widget=forms.CheckboxSelectMultiple,
+                widget=forms.CheckboxSelectMultiple if should_show else forms.MultipleHiddenInput,
                 choices=self.get_choices(),
             )
 
