@@ -292,9 +292,13 @@ class FormField(FormFieldBase):
         else:
             return not is_update
 
-    def get_field(self, *, form_class, **kwargs):
+    def get_field(self, *, form_class, should_show, **kwargs):
+
+        # Если поле не должно показываться, оно становится is_required=False, иначе self.is_required
+        is_required = self.is_required if should_show else False
+
         kwargs.setdefault("label", self.label)
-        kwargs.setdefault("required", self.is_required)
+        kwargs.setdefault("required", is_required)
         kwargs.setdefault("help_text", self.help_text)
         return {self.name: form_class(**kwargs)}
 
@@ -428,59 +432,93 @@ class SimpleFieldBase(FormField):
         if self.type == type.TEXT:
             return self.get_field(
                 form_class=forms.CharField,
+                should_show=should_show,
                 max_length=self.max_length,
-                widget=forms.CharField.widget(
-                    attrs={"placeholder": self.placeholder or False}
-                ) if should_show else forms.HiddenInput,
+                widget=(
+                    forms.CharField.widget(
+                        attrs={"placeholder": self.placeholder or False}
+                    )
+                    if should_show
+                    else forms.HiddenInput
+                ),
             )
 
         elif self.type == type.EMAIL:
             return self.get_field(
                 form_class=forms.EmailField,
-                widget=forms.EmailField.widget(
-                    attrs={"placeholder": self.placeholder or False}
-                ) if should_show else forms.HiddenInput,
+                should_show=should_show,
+                widget=(
+                    forms.EmailField.widget(
+                        attrs={"placeholder": self.placeholder or False}
+                    )
+                    if should_show
+                    else forms.HiddenInput
+                ),
             )
 
         elif self.type == type.URL:
             return self.get_field(
                 form_class=forms.URLField,
-                widget=forms.URLField.widget(
-                    attrs={"placeholder": self.placeholder or False}
-                ) if should_show else forms.HiddenInput,
+                should_show=should_show,
+                widget=(
+                    forms.URLField.widget(
+                        attrs={"placeholder": self.placeholder or False}
+                    )
+                    if should_show
+                    else forms.HiddenInput
+                ),
             )
 
         elif self.type == type.DATE:
             return self.get_field(
                 form_class=forms.DateField,
-                widget=forms.DateInput(
-                    attrs={"placeholder": self.placeholder or False, "type": "date"}
-                ) if should_show else forms.HiddenInput,
+                should_show=should_show,
+                widget=(
+                    forms.DateInput(
+                        attrs={"placeholder": self.placeholder or False, "type": "date"}
+                    )
+                    if should_show
+                    else forms.HiddenInput
+                ),
             )
 
         elif self.type == type.INTEGER:
             return self.get_field(
                 form_class=forms.IntegerField,
-                widget=forms.IntegerField.widget(
-                    attrs={"placeholder": self.placeholder or False}
-                ) if should_show else forms.HiddenInput,
+                should_show=should_show,
+                widget=(
+                    forms.IntegerField.widget(
+                        attrs={"placeholder": self.placeholder or False}
+                    )
+                    if should_show
+                    else forms.HiddenInput
+                ),
             )
 
         elif self.type == type.TEXTAREA:
             return self.get_field(
                 form_class=forms.CharField,
+                should_show=should_show,
                 max_length=self.max_length,
-                widget=forms.Textarea(
-                    attrs={
-                        "maxlength": self.max_length or False,
-                        "placeholder": self.placeholder or False,
-                        "rows": 5,
-                    },
-                ) if should_show else forms.HiddenInput,
+                widget=(
+                    forms.Textarea(
+                        attrs={
+                            "maxlength": self.max_length or False,
+                            "placeholder": self.placeholder or False,
+                            "rows": 5,
+                        },
+                    )
+                    if should_show
+                    else forms.HiddenInput
+                ),
             )
 
         elif self.type == type.CHECKBOX:
-            return self.get_field(form_class=forms.BooleanField, widget=forms.CheckboxInput if should_show else forms.HiddenInput)
+            return self.get_field(
+                form_class=forms.BooleanField,
+                should_show=should_show,
+                widget=forms.CheckboxInput if should_show else forms.HiddenInput,
+            )
 
         elif self.type == type.SELECT:
             choices = self.get_choices()
@@ -491,23 +529,29 @@ class SimpleFieldBase(FormField):
                 choices = blank_choice + choices
             return self.get_field(
                 form_class=forms.ChoiceField,
+                should_show=should_show,
                 choices=choices,
                 # 30/10/2024 - инициализация select2 widget библиотеки django_select2
-                widget=s2forms.Select2Widget(
-                    attrs={
-                        "data-minimum-input-length": 0,  # Количество символов, чтобы начать поиск
-                        "data-maximum-input-length": 1000,  # Максимальное кол-во символов в input
-                        "data-placeholder": "Нажмите для выбора",  # Надпись
-                        "data-close-on-select": "true",  # Закрывать селектор после выбора
-                        "data-allow-clear": "true",  # Иконка закрыть
-                        "data-language": "ru",
-                    }
-                ) if should_show else forms.HiddenInput,
+                widget=(
+                    s2forms.Select2Widget(
+                        attrs={
+                            "data-minimum-input-length": 0,  # Количество символов, чтобы начать поиск
+                            "data-maximum-input-length": 1000,  # Максимальное кол-во символов в input
+                            "data-placeholder": "Нажмите для выбора",  # Надпись
+                            "data-close-on-select": "true",  # Закрывать селектор после выбора
+                            "data-allow-clear": "true",  # Иконка закрыть
+                            "data-language": "ru",
+                        }
+                    )
+                    if should_show
+                    else forms.HiddenInput
+                ),
             )
 
         elif self.type == type.RADIO:
             return self.get_field(
                 form_class=forms.ChoiceField,
+                should_show=should_show,
                 widget=forms.RadioSelect if should_show else forms.HiddenInput,
                 choices=self.get_choices(),
             )
@@ -515,14 +559,22 @@ class SimpleFieldBase(FormField):
         elif self.type == type.SELECT_MULTIPLE:
             return self.get_field(
                 form_class=forms.MultipleChoiceField,
+                should_show=should_show,
                 choices=self.get_choices(),
-                widget=forms.SelectMultiple if should_show else forms.MultipleHiddenInput
+                widget=(
+                    forms.SelectMultiple if should_show else forms.MultipleHiddenInput
+                ),
             )
 
         elif self.type == type.CHECKBOX_SELECT_MULTIPLE:
             return self.get_field(
                 form_class=forms.MultipleChoiceField,
-                widget=forms.CheckboxSelectMultiple if should_show else forms.MultipleHiddenInput,
+                should_show=should_show,
+                widget=(
+                    forms.CheckboxSelectMultiple
+                    if should_show
+                    else forms.MultipleHiddenInput
+                ),
                 choices=self.get_choices(),
             )
 
