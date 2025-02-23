@@ -83,6 +83,7 @@ class FormFieldInline(ContentEditorInline):
         "execute_periodically",
         "crontab",
         "python_script",
+        "validation_python_script",
     ]
 
     def get_fieldsets(self, request, obj=None):
@@ -126,6 +127,7 @@ class SimpleFieldInline(FormFieldInline):
                     "execute_periodically",
                     "crontab",
                     "python_script",
+                    "validation_python_script",
                 ],
             )
 
@@ -146,6 +148,7 @@ class SimpleFieldInline(FormFieldInline):
                     "execute_periodically",
                     "crontab",
                     "python_script",
+                    "validation_python_script",
                 ],
             )
 
@@ -165,6 +168,7 @@ class SimpleFieldInline(FormFieldInline):
                     "execute_periodically",
                     "crontab",
                     "python_script",
+                    "validation_python_script",
                 ],
             )
 
@@ -188,6 +192,7 @@ class SimpleFieldInline(FormFieldInline):
                     "execute_periodically",
                     "crontab",
                     "python_script",
+                    "validation_python_script",
                 ],
             )
 
@@ -214,6 +219,7 @@ class SimpleFieldInline(FormFieldInline):
                     "execute_periodically",
                     "crontab",
                     "python_script",
+                    "validation_python_script",
                 ],
             )
 

@@ -269,6 +269,12 @@ class FormField(FormFieldBase):
         verbose_name=_("Python-скрипт"),
         help_text="Доступен атрибут self записи",
     )
+    validation_python_script = models.TextField(
+        null=True,
+        blank=True,
+        verbose_name=_("Python-скрипт валидации"),
+        help_text="Доступен атрибут self записи, обрабатывает ValidationError",
+    )
 
     class Meta:
         abstract = True
