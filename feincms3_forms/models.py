@@ -221,8 +221,18 @@ class FormField(FormFieldBase):
 
     # CUSTOM FIELDS
 
-    is_unique = models.BooleanField(
-        default=False, verbose_name=_("Поле должно быть уникальным")
+    # is_unique = models.BooleanField(
+    #     default=False, verbose_name=_("Поле должно быть уникальным")
+    # )
+
+    is_table_visible = models.BooleanField(
+            _("Виден в табличном режиме"), default=True
+        )
+    is_modal_visible = models.BooleanField(
+            _("Виден в модальном режиме"), default=True
+        )
+    is_modal_detail_visible = models.BooleanField(
+        _("Виден в модальном окне детализации"), default=True
     )
 
     is_visible = models.BooleanField(
@@ -251,18 +261,20 @@ class FormField(FormFieldBase):
     execute_on_every_save = models.BooleanField(
         default=False, verbose_name=_("Выполнять скрипт при каждом сохранении")
     )
-    execute_periodically = models.BooleanField(
-        default=False,
-        verbose_name=_("Выполнять периодически"),
-        help_text=_("Выполнять периодически пока поле не будет заполнено."),
-    )
-    crontab = models.ForeignKey(
-        CrontabSchedule,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-        verbose_name=_("Периодичность"),
-    )
+
+    # Перенесено в модель формы, чтобы не дублировать
+    # execute_periodically = models.BooleanField(
+    #     default=False,
+    #     verbose_name=_("Выполнять периодически"),
+    #     help_text=_("Выполнять периодически пока поле не будет заполнено."),
+    # )
+    # crontab = models.ForeignKey(
+    #     CrontabSchedule,
+    #     on_delete=models.PROTECT,
+    #     null=True,
+    #     blank=True,
+    #     verbose_name=_("Периодичность"),
+    # )
     python_script = models.TextField(
         null=True,
         blank=True,
@@ -284,7 +296,7 @@ class FormField(FormFieldBase):
 
     def should_show_field(self, is_update=False):
         """
-        Определяет, должно ли поле отображаться.
+        Определяет, должно ли поле отображаться (в формах).
 
         Условия:
           - Если is_visible == False, поле не показывается.
