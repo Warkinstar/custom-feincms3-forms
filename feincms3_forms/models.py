@@ -376,7 +376,8 @@ class SimpleFieldBase(FormField):
         abstract = True
 
     def save(self, *args, **kwargs):
-        self.type = self.TYPE
+        if hasattr(self, "TYPE"):
+            self.type = self.TYPE
         super().save(*args, **kwargs)
 
     save.alters_data = True
