@@ -203,9 +203,14 @@ class ConfiguredForm(models.Model):
                 try:
                     plugin._meta.get_field(attribute)
                 except FieldDoesNotExist:
-                    # Если поля нет в модели плагина, используем значение по умолчанию из FIELD_DEFAULTS
-                    default, field_type = FIELD_DEFAULTS.get(attribute, ("", models.TextField()))
-                    annotations[alias] = Value(default, output_field=field_type)
+                    # сначала пробуем взять значение из Python-атрибута
+                    value = getattr(plugin, attribute, None)
+                    if value is not None:
+                        annotations[alias] = Value(value, output_field=models.TextField())
+                    else:
+                        # Если поля нет в модели плагина и свойствах, используем значение по умолчанию из FIELD_DEFAULTS
+                        default, field_type = FIELD_DEFAULTS.get(attribute, ("", models.TextField()))
+                        annotations[alias] = Value(default, output_field=field_type)
                 else:
                     annotations[alias] = F(attribute)
             qs = qs.annotate(**annotations)
