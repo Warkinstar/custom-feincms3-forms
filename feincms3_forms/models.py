@@ -171,6 +171,14 @@ class ConfiguredForm(models.Model):
             sender.type = property(lambda self: types.get(self.form_type))
 
     def get_formfields_union(self, *, plugins, attributes=None):
+
+        # Поля по умолчанию для атрибутов, которых нет в модели плагина
+        FIELD_DEFAULTS = {
+            "is_collapsible": (False, models.BooleanField()),
+            "is_collapse_below": (False, models.BooleanField()),
+            "is_collapsed_by_default": (False, models.BooleanField()),
+        }
+
         values = ["name"]
         columns = []
         for index, attribute in enumerate(attributes or []):
@@ -195,7 +203,9 @@ class ConfiguredForm(models.Model):
                 try:
                     plugin._meta.get_field(attribute)
                 except FieldDoesNotExist:
-                    annotations[alias] = Value(getattr(plugin, attribute, ""))
+                    # Если поля нет в модели плагина, используем значение по умолчанию из FIELD_DEFAULTS
+                    default, field_type = FIELD_DEFAULTS.get(attribute, ("", models.TextField()))
+                    annotations[alias] = Value(default, output_field=field_type)
                 else:
                     annotations[alias] = F(attribute)
             qs = qs.annotate(**annotations)
