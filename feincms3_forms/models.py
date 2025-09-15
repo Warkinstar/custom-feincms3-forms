@@ -246,6 +246,9 @@ class FormField(FormFieldBase):
     is_modal_visible = models.BooleanField(
             _("Виден в модальном режиме"), default=True
         )
+    is_card_visible = models.BooleanField(
+        _("Виден в карточном режиме"), default=False
+    )
     is_modal_detail_visible = models.BooleanField(
         _("Виден в модальном окне детализации"), default=True
     )

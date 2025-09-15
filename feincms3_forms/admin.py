@@ -75,8 +75,9 @@ class FormFieldInline(ContentEditorInline):
         "help_text",
         # CUSTOM FIELDS
         # "is_unique",  # Достигается через скрипты
+        "is_card_visible",
         "is_table_visible",
-        "is_modal_visible",
+        # "is_modal_visible",  # Не используется
         "is_modal_detail_visible",
         "is_visible",
         "is_editable",
@@ -123,7 +124,8 @@ class SimpleFieldInline(FormFieldInline):
                     "max_length",
                     # CUSTOM FIELDS
                     "is_table_visible",
-                    "is_modal_visible",
+                    "is_card_visible",
+                    # "is_modal_visible",  # Не используется
                     "is_modal_detail_visible",
                     "is_visible",
                     "is_editable",
@@ -145,7 +147,8 @@ class SimpleFieldInline(FormFieldInline):
                     "default_value",
                     # CUSTOM FIELDS
                     "is_table_visible",
-                    "is_modal_visible",
+                    "is_card_visible",
+                    # "is_modal_visible",
                     "is_modal_detail_visible",
                     "is_visible",
                     "is_editable",
@@ -166,7 +169,8 @@ class SimpleFieldInline(FormFieldInline):
                     "default_value",
                     # CUSTOM FIELDS
                     "is_table_visible",
-                    "is_modal_visible",
+                    "is_card_visible",
+                    # "is_modal_visible",
                     "is_modal_detail_visible",
                     "is_visible",
                     "is_editable",
@@ -191,7 +195,8 @@ class SimpleFieldInline(FormFieldInline):
                     "default_value",
                     # CUSTOM FIELDS
                     "is_table_visible",
-                    "is_modal_visible",
+                    "is_card_visible",
+                    # "is_modal_visible",
                     "is_modal_detail_visible",
                     "is_visible",
                     "is_editable",
@@ -219,7 +224,8 @@ class SimpleFieldInline(FormFieldInline):
                     "default_value",
                     # CUSTOM FIELDS
                     "is_table_visible",
-                    "is_modal_visible",
+                    "is_card_visible",
+                    # "is_modal_visible",
                     "is_modal_detail_visible",
                     "is_visible",
                     "is_editable",
